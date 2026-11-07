@@ -538,6 +538,30 @@ test('reactive, computed, when, and negated aliases', () => {
   lacks(result, 7, 'reactive', 'storage');
 });
 
+test('run bodies', () => {
+  const result = tokenize([
+    'if x > 5 run greet("big")',
+    'else if x > 2 run print "medium"',
+    'else run greet("small")',
+    'for i in items run print i',
+    'while busy run step()',
+    'when score > 3 run celebrate()',
+    'run()',
+    'os.run "ls"',
+    'var run = 1',
+  ].join('\n'));
+  has(result, 0, 'run', 'keyword.control.flywheel');
+  has(result, 1, 'run', 'keyword.control.flywheel');
+  has(result, 2, 'run', 'keyword.control.flywheel');
+  has(result, 3, 'run', 'keyword.control.flywheel');
+  has(result, 4, 'run', 'keyword.control.flywheel');
+  has(result, 5, 'when', 'keyword.control.flywheel');
+  has(result, 5, 'run', 'keyword.control.flywheel');
+  lacks(result, 6, 'run', 'keyword');
+  lacks(result, 7, 'run', 'keyword');
+  lacks(result, 8, 'run', 'keyword');
+});
+
 test('unit declarations, quantity types, quantity literals, and conversions', () => {
   const result = tokenize([
     'unitns time',
