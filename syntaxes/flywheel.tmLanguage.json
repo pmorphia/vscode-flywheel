@@ -496,6 +496,15 @@
           "name": "keyword.control.flywheel"
         },
         {
+          "comment": "`extends` (a soft keyword) names a base class or constraint between two names: `class Dog extends Animal`, `interface Named extends Shape`, `<T extends Shape>`. As a name (`extends()`, `x.extends`, `var extends = 1`) it stays an identifier.",
+          "match": "(?<=[A-Za-z0-9_])[ \\t]+(extends)(?=[ \\t]+[A-Za-z_])",
+          "captures": {
+            "1": {
+              "name": "storage.modifier.extends.flywheel"
+            }
+          }
+        },
+        {
           "comment": "`reactive` and `computed` precede a declaration.",
           "match": "\\b(?:reactive|computed)\\b(?=\\s+(?:var\\b|[A-Za-z_][A-Za-z0-9_]*))",
           "name": "storage.modifier.reactive.flywheel"

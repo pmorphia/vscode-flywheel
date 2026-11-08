@@ -562,6 +562,22 @@ test('run bodies', () => {
   lacks(result, 8, 'run', 'keyword');
 });
 
+test('extends as a soft keyword', () => {
+  const result = tokenize([
+    'class Dog extends Animal',
+    'interface Named extends Shape',
+    'extends()',
+    'x.extends = 2',
+    'var extends = 1',
+  ].join('\n'));
+  has(result, 0, 'extends', 'storage.modifier.extends.flywheel');
+  has(result, 0, 'Dog', 'entity.name.type.class.flywheel');
+  has(result, 1, 'extends', 'storage.modifier.extends.flywheel');
+  lacks(result, 2, 'extends', 'storage');
+  lacks(result, 3, 'extends', 'storage');
+  lacks(result, 4, 'extends', 'storage');
+});
+
 test('unit declarations, quantity types, quantity literals, and conversions', () => {
   const result = tokenize([
     'unitns time',
