@@ -87,7 +87,7 @@ test('declarations, imports, built-ins, calls, and errors', () => {
   assert.equal(result.stack.depth, 1);
 });
 
-test('native and string imports, named errors, assert, then, and <json> literals', () => {
+test('native and string imports, named errors, assert, finally, and <json> literals', () => {
   const result = tokenize([
     'import++ vec',
     'import cxx "lib/text.cpp" as text',
@@ -99,7 +99,7 @@ test('native and string imports, named errors, assert, then, and <json> literals
     '    throw "MyError" "message"',
     'catch "MyError" e',
     '    print e.name',
-    'then',
+    'finally',
     '    print "done"',
     'end',
     'var doc = <json>{"name": "Ann", "tags": [1, 2.5e3], "ok": true, "none": null}</json>',
@@ -118,7 +118,7 @@ test('native and string imports, named errors, assert, then, and <json> literals
   has(result, 6, 'assert', 'keyword.control.flywheel');
   has(result, 7, 'throw', 'keyword.control.flywheel');
   has(result, 8, '"MyError"', 'string.quoted.double.flywheel');
-  has(result, 10, 'then', 'keyword.control.flywheel');
+  has(result, 10, 'finally', 'keyword.control.flywheel');
   has(result, 13, 'json', 'entity.name.tag.flywheel');
   has(result, 13, '"name"', 'support.type.property-name.json.flywheel');
   has(result, 13, '"Ann"', 'string.quoted.double.json.flywheel');
@@ -137,7 +137,7 @@ test('ranges, arithmetic, literals, comparisons, and generic types remain code',
     'var numbers = 1..3',
     'var other = -2..<10',
     'var ratio = 10 // 3 + 1.25e-3',
-    'if a < b and n >= 0 then',
+    'if a < b and n >= 0 do',
     '    print true or false',
     'end',
     'array<map<string, tuple<element?>>>[] values = []',
@@ -273,7 +273,7 @@ test('attribute names are never keywords, including valueless, single-quoted, an
     'var a = <h1 class="title">Hi</h1>',
     'var b = <input disabled class="x" />',
     "var c = <p class=big id='n {n}'>x</p>",
-    'if a <b or c == d then',
+    'if a <b or c == d do',
     'end',
   ].join('\n'));
   has(result, 0, 'class', 'entity.other.attribute-name.flywheel');
@@ -450,14 +450,14 @@ test('editor configuration uses Flywheel comments and word-oriented block indent
   const increase = new RegExp(config.indentationRules.increaseIndentPattern);
   const decrease = new RegExp(config.indentationRules.decreaseIndentPattern);
   for (const line of ['function main returns void', 'private function f(int n) returns int',
-    'class Person', 'if ready then', 'else if other then', 'else', 'for x in 1..3 do',
+    'class Person', 'if ready do', 'else if other do', 'else do', 'for x in 1..3 do',
     'while true do', 'when winning do', 'try', 'catch ProcessError error', 'finally']) {
     assert.ok(increase.test(line), `Should indent after: ${line}`);
   }
-  for (const line of ['print "then"', '# if true then', 'var x = 3', 'end']) {
+  for (const line of ['print "do"', '# if true do', 'var x = 3', 'end', 'else run f()']) {
     assert.ok(!increase.test(line), `Should not indent after: ${line}`);
   }
-  for (const line of ['end', 'else', 'catch Error error', 'finally']) {
+  for (const line of ['end', 'else do', 'catch Error error', 'finally']) {
     assert.ok(decrease.test(line), `Should dedent: ${line}`);
   }
   for (const line of ['print "end"', '# end', 'var end_value = 3']) {

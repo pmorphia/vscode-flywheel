@@ -23,7 +23,7 @@
   "If": {
     "prefix": "if",
     "body": [
-      "if ${1:condition} then",
+      "if ${1:condition} do",
       "    $0",
       "end"
     ],
@@ -32,9 +32,9 @@
   "If / else": {
     "prefix": "ifelse",
     "body": [
-      "if ${1:condition} then",
+      "if ${1:condition} do",
       "    $2",
-      "else",
+      "else do",
       "    $0",
       "end"
     ],
@@ -99,18 +99,18 @@
     ],
     "description": "Handle a typed error"
   },
-  "Try / catch by name / then": {
-    "prefix": "trythen",
+  "Try / catch by name / finally": {
+    "prefix": "trynamed",
     "body": [
       "try",
       "    $1",
       "catch \"${2:ValueError}\" ${3:error}",
       "    $4",
-      "then",
+      "finally",
       "    $0",
       "end"
     ],
-    "description": "Catch an error by name; `then` runs on every exit (like finally)"
+    "description": "Catch an error by name; `finally` runs on every exit"
   },
   "Throw named error": {
     "prefix": "throw",

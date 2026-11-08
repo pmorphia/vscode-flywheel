@@ -38,7 +38,7 @@ Node.js 22 or later is needed only to run the development and packaging tools. T
 
 ## Highlighting
 
-- Declarations, visibility modifiers, imports (including string, path, and URL imports, `import++`, and `import c`/`cxx`/`rust`/`zig` native imports), control flow (`try`/`catch`/`then`, `throw ... with`, `assert`), built-in functions (including `input`, `type`, `unit`, and `unitns`), types, typed errors, and declared error types (`error HttpFailure(int status)`).
+- Declarations, visibility modifiers, imports (including string, path, and URL imports, `import++`, and `import c`/`cxx`/`rust`/`zig` native imports), control flow (`try`/`catch`/`finally`, `throw ... with`, `assert`), built-in functions (including `input`, `type`, `unit`, and `unitns`), types, typed errors, and declared error types (`error HttpFailure(int status)`).
 - Strings with escapes, doubled literal braces, and nested expression interpolation.
 - Numbers, inclusive/exclusive ranges, arithmetic, comparisons, and logical operators. `#` is a comment; `//` is integer division.
 - Reactive declarations (`reactive`, `computed`), `when condition do ... end`, and negated bool aliases (`bool enabled/disabled = true`). These are soft keywords, so `when` and `reactive` used as names stay identifiers.
