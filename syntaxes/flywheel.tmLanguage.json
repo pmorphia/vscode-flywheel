@@ -336,12 +336,16 @@
           }
         },
         {
-          "match": "\\b(component)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+          "comment": "`component Name = <markup>`; `void component Name` (`void` is a soft keyword here) declares a void component, used like <br> with no closing tag or children.",
+          "match": "\\b(?:(void)\\s+)?(component)\\s+([A-Za-z_][A-Za-z0-9_]*)",
           "captures": {
             "1": {
-              "name": "storage.type.component.flywheel"
+              "name": "storage.modifier.void.flywheel"
             },
             "2": {
+              "name": "storage.type.component.flywheel"
+            },
+            "3": {
               "name": "entity.name.type.component.flywheel"
             }
           }
@@ -651,6 +655,9 @@
           "include": "#void-element"
         },
         {
+          "include": "#component-element"
+        },
+        {
           "include": "#element"
         },
         {
@@ -687,10 +694,38 @@
         }
       ]
     },
+    "component-element": {
+      "name": "meta.element.flywheel",
+      "begin": "(?=<(?!(?:area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)(?![A-Za-z0-9_.:-]))((?:[A-Z][A-Za-z0-9_:-]*|[A-Za-z_][A-Za-z0-9_:-]*\\.[A-Za-z_])[A-Za-z0-9_.:-]*)(?:\\s*/?>|\\s+[A-Za-z_][A-Za-z0-9_.:-]*(?:\\s+[A-Za-z_][A-Za-z0-9_.:-]*)*(?:\\s*=(?!=)|\\s*/>|>)))",
+      "end": "(/>)|(</)(\\1)(\\s*)(>)|(?=</(?!\\1(?![A-Za-z0-9_.:-])))|(?<=>)(?=[}),\\]])|(?=^\\s*(?:var|const|print|return|if|else|for|while|match|case|function|class|component|void|end|import|public|private|try|catch|finally|throw)\\b(?![=(.]))",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.end.flywheel"
+        },
+        "2": {
+          "name": "punctuation.definition.tag.begin.flywheel"
+        },
+        "3": {
+          "name": "entity.name.tag.flywheel"
+        },
+        "5": {
+          "name": "punctuation.definition.tag.end.flywheel"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#tag-header"
+        },
+        {
+          "include": "#component-element-content"
+        }
+      ],
+      "comment": "A component (a capitalized or module-qualified tag). Void components (`void component Icon`) need no closing tag, so an element left open ends with its expression: before `}`, `)`, `]` or `,` right after the tag, or before a line that starts a statement."
+    },
     "element": {
       "name": "meta.element.flywheel",
       "begin": "(?=<(?!(?:area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)(?![A-Za-z0-9_.:-]))([A-Za-z_][A-Za-z0-9_.:-]*)(?:\\s*/?>|\\s+[A-Za-z_][A-Za-z0-9_.:-]*(?:\\s+[A-Za-z_][A-Za-z0-9_.:-]*)*(?:\\s*=(?!=)|\\s*/>|>)))",
-      "end": "(/>)|(</)(\\1)(\\s*)(>)",
+      "end": "(/>)|(</)(\\1)(\\s*)(>)|(?=</(?!\\1(?![A-Za-z0-9_.:-])))",
       "endCaptures": {
         "1": {
           "name": "punctuation.definition.tag.end.flywheel"
@@ -831,7 +866,7 @@
     "multiline-element": {
       "name": "meta.element.flywheel",
       "begin": "(?:^\\s*|(?<=[=(:,\\[\\{])\\s*|(?<=\\breturn)\\s+|(?<=\\bprint)\\s+)(?=<(?!(?:area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)(?![A-Za-z0-9_.:-]))([A-Za-z_][A-Za-z0-9_.:-]*)\\s*$)",
-      "end": "(/>)|(</)(\\1)(\\s*)(>)",
+      "end": "(/>)|(</)(\\1)(\\s*)(>)|(?=</(?!\\1(?![A-Za-z0-9_.:-])))",
       "endCaptures": {
         "1": {
           "name": "punctuation.definition.tag.end.flywheel"
@@ -873,7 +908,7 @@
     "nested-element": {
       "name": "meta.element.flywheel",
       "begin": "(?=<(?!(?:area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)(?![A-Za-z0-9_.:-]))([A-Za-z_][A-Za-z0-9_.:-]*)(?:(?:\\s*/?>|\\s+[A-Za-z_][A-Za-z0-9_.:-]*(?:\\s+[A-Za-z_][A-Za-z0-9_.:-]*)*(?:\\s*=(?!=)|\\s*/>|>))|\\s*$))",
-      "end": "(/>)|(</)(\\1)(\\s*)(>)",
+      "end": "(/>)|(</)(\\1)(\\s*)(>)|(?=</(?!\\1(?![A-Za-z0-9_.:-])))",
       "endCaptures": {
         "1": {
           "name": "punctuation.definition.tag.end.flywheel"
@@ -964,6 +999,21 @@
         }
       },
       "end": "(?=</)",
+      "patterns": [
+        {
+          "include": "#markup-content"
+        }
+      ]
+    },
+    "component-element-content": {
+      "name": "meta.markup.content.flywheel",
+      "begin": ">",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.tag.end.flywheel"
+        }
+      },
+      "end": "(?=</)|(?<=>)(?=[}),\\]])|(?=^\\s*(?:var|const|print|return|if|else|for|while|match|case|function|class|component|void|end|import|public|private|try|catch|finally|throw)\\b(?![=(.]))",
       "patterns": [
         {
           "include": "#markup-content"

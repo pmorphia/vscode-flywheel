@@ -578,6 +578,40 @@ test('extends as a soft keyword', () => {
   lacks(result, 4, 'extends', 'storage');
 });
 
+test('void components', () => {
+  const result = tokenize([
+    'void component Icon = <i class={attr name} />',
+    'public void component Rule = <hr>',
+    'function show() returns void',
+    'var star = <Icon name="star">',
+    'print <p>Rated <Icon name="a"> of 5</p>',
+    'print <ul>{<Icon name="b">}</ul>',
+    'render(<Icon name="c">)',
+    'print <Card user={u}>',
+    '    <p>child</p>',
+    '</Card>',
+    'print star',
+  ].join('\n'));
+  has(result, 0, 'void', 'storage.modifier.void.flywheel');
+  has(result, 0, 'component', 'storage.type.component.flywheel');
+  has(result, 0, 'Icon', 'entity.name.type.component.flywheel');
+  has(result, 1, 'void', 'storage.modifier.void.flywheel');
+  has(result, 1, 'Rule', 'entity.name.type.component.flywheel');
+  has(result, 2, 'void', 'support.type.flywheel');
+  lacks(result, 2, 'void', 'storage.modifier');
+  // An open component tag ends with its expression or its enclosing element.
+  has(result, 4, 'of 5', 'string.unquoted.markup.flywheel');
+  has(result, 4, '</', 'punctuation.definition.tag.begin.flywheel');
+  lacks(result, 5, '}', 'string');
+  has(result, 5, 'ul', 'entity.name.tag.flywheel', 1);
+  lacks(result, 6, ')', 'meta.element');
+  has(result, 8, 'p', 'entity.name.tag.flywheel');
+  has(result, 9, 'Card', 'entity.name.tag.flywheel');
+  lacks(result, 10, 'print', 'meta.element');
+  lacks(result, 3, 'var', 'meta.element');
+  assert.equal(result.stack.depth, 1);
+});
+
 test('unit declarations, quantity types, quantity literals, and conversions', () => {
   const result = tokenize([
     'unitns time',
