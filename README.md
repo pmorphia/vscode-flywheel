@@ -1,10 +1,10 @@
 # Flywheel for Visual Studio Code
 
-Syntax highlighting, editing support, and language server features for Flywheel `.fw` and `.fly` files. Highlighting and snippets need nothing else installed; the language features start `flywheel lsp` from the Flywheel compiler.
+Syntax highlighting, editing support, and language server features for Flywheel `.fw` and `.fly` files. Highlighting and snippets need nothing else installed; the language features start `flywheel --lsp` from the Flywheel compiler.
 
 ## Language server
 
-When a Flywheel file opens, the extension starts `flywheel lsp` and provides:
+When a Flywheel file opens, the extension starts `flywheel --lsp` and provides:
 
 - diagnostics from the compiler's semantic check (the first error per check),
 - hover with the declaration and its `#` documentation comment,
@@ -12,11 +12,11 @@ When a Flywheel file opens, the extension starts `flywheel lsp` and provides:
 - rename of variables, parameters, functions, classes, fields, and methods,
 - completion of names in scope, module members after `module.`, and class members after `inst`,
 - the document outline (symbols), and
-- whole-document formatting (`flywheel fmt`).
+- whole-document formatting (`flywheel --format`).
 
 | Setting | Default | Meaning |
 |---|---|---|
-| `flywheel.path` | `flywheel` | the compiler executable that serves `flywheel lsp` |
+| `flywheel.path` | `flywheel` | the compiler executable that serves `flywheel --lsp` |
 | `flywheel.languageServer.enabled` | `true` | set to `false` for highlighting and snippets only |
 
 If the compiler cannot be started, the extension shows one warning and keeps highlighting. The client is a small JSON-RPC implementation in `extension.js`, so the packaged extension has no runtime dependencies.

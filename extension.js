@@ -1,4 +1,4 @@
-// Starts `flywheel lsp` for Flywheel files and connects it to VS Code's language features:
+// Starts `flywheel --lsp` for Flywheel files and connects it to VS Code's language features:
 // diagnostics, hover, go to definition, references, rename, completion, document symbols,
 // and formatting. A small JSON-RPC client keeps the extension free of runtime dependencies.
 'use strict';
@@ -35,7 +35,7 @@ class Client {
     this.nextId = 1;
     this.pending = new Map();
     this.buffer = Buffer.alloc(0);
-    this.process = spawn(command, ['lsp'], { stdio: ['pipe', 'pipe', 'pipe'] });
+    this.process = spawn(command, ['--lsp'], { stdio: ['pipe', 'pipe', 'pipe'] });
     this.process.stdout.on('data', chunk => {
       const { messages, rest } = parseMessages(Buffer.concat([this.buffer, chunk]));
       this.buffer = rest;
@@ -52,7 +52,7 @@ class Client {
     this.process.on('exit', code => {
       for (const { reject } of this.pending.values()) reject(new Error('language server exited'));
       this.pending.clear();
-      onExit(code === 0 || code === null ? null : new Error(`flywheel lsp exited with code ${code}`));
+      onExit(code === 0 || code === null ? null : new Error(`flywheel --lsp exited with code ${code}`));
     });
   }
   request(method, params) {

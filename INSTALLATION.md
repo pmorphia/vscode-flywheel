@@ -1,6 +1,6 @@
 # Installing the Flywheel VS Code extension
 
-The extension adds syntax highlighting and snippets for `.fw` and `.fly` files. When the Flywheel compiler is available, it also starts `flywheel lsp` for diagnostics, hover, navigation, rename, completion, and formatting.
+The extension adds syntax highlighting and snippets for `.fw` and `.fly` files. When the Flywheel compiler is available, it also starts `flywheel --lsp` for diagnostics, hover, navigation, rename, completion, and formatting.
 
 You install it from a `.vsix` package built from this directory.
 
@@ -117,6 +117,6 @@ Or use **Extensions → Flywheel → Uninstall**.
 | Problem | Fix |
 |---|---|
 | `npm ci` fails | Check `node --version` (22+ is required); delete `node_modules` and retry |
-| "Flywheel language server unavailable" | Set `flywheel.path` to the compiler, and check that `flywheel lsp` starts in a terminal |
+| "Flywheel language server unavailable" | Set `flywheel.path` to the compiler, and check that `flywheel --lsp` starts in a terminal |
 | No diagnostics, but highlighting works | Make sure `flywheel.languageServer.enabled` is `true`, then reload the window |
 | `code: command not found` | In VS Code, run **Shell Command: Install 'code' command in PATH** (Linux), or install from VSIX through the UI |
