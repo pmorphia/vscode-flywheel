@@ -365,6 +365,42 @@
           }
         },
         {
+          "comment": "`enum Name` and `interface Name` (also `interface Named extends Shape`).",
+          "match": "\\b(enum|interface)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": {
+              "name": "storage.type.flywheel"
+            },
+            "2": {
+              "name": "entity.name.type.flywheel"
+            }
+          }
+        },
+        {
+          "comment": "`struct Name` (a soft keyword) on its own line declares a value type.",
+          "match": "(?:^\\s*|(?<=\\bpublic\\s|\\bprivate\\s))(struct)\\s+([A-Za-z_][A-Za-z0-9_]*)(?=\\s*(?:#|$))",
+          "captures": {
+            "1": {
+              "name": "storage.type.struct.flywheel"
+            },
+            "2": {
+              "name": "entity.name.type.struct.flywheel"
+            }
+          }
+        },
+        {
+          "comment": "`elements name` ... `end` declares an element family.",
+          "match": "^\\s*(elements)\\s+([A-Za-z_][A-Za-z0-9_-]*)",
+          "captures": {
+            "1": {
+              "name": "storage.type.elements.flywheel"
+            },
+            "2": {
+              "name": "entity.name.namespace.elements.flywheel"
+            }
+          }
+        },
+        {
           "comment": "`error Name` / `error Name(int status)` at the start of a statement declares an error type.",
           "match": "(?:^\\s*|(?<=\\bpublic\\s|\\bprivate\\s))(error)\\s+([A-Za-z_][A-Za-z0-9_]*)(?=\\s*(?:\\(|#|$))",
           "captures": {
@@ -496,12 +532,13 @@
           ]
         },
         {
-          "match": "\\b(?:if|else|while|do|for|in|end|break|continue|return|try|catch|finally|throw|assert)\\b",
+          "comment": "`unless c` is `if not (c)`; `match` and `case` are statements and expressions (`case p => value`); `defer` runs a statement or block when the enclosing block exits.",
+          "match": "\\b(?:if|unless|else|while|do|for|in|end|break|continue|return|try|catch|finally|throw|assert|match|case|defer)\\b",
           "name": "keyword.control.flywheel"
         },
         {
-          "comment": "`when condition do ... end` runs its body each time the condition becomes true (`when condition run call()` runs one call).",
-          "match": "^\\s*(when)\\b(?=.*\\b(?:do|run)\\b)",
+          "comment": "`when condition do ... end` runs its body each time the condition becomes true (`when condition run call()` runs one call); `defer when` checks it between statements.",
+          "match": "(?:^\\s*|(?<=\\bdefer[ \\t]))(when)\\b(?=.*\\b(?:do|run)\\b)",
           "captures": {
             "1": {
               "name": "keyword.control.flywheel"
@@ -532,8 +569,17 @@
           "name": "keyword.operator.logical.flywheel"
         },
         {
-          "comment": "Access modifiers and `static` are soft keywords before a declaration on the same line.",
-          "match": "\\b(?:public|private|protected|static)\\b(?=[ \\t]+[A-Za-z_])",
+          "comment": "Type tests and casts: `b is Dog`, `b as Dog?`.",
+          "match": "\\b(?:is|as)\\b",
+          "name": "keyword.operator.type.flywheel"
+        },
+        {
+          "match": "\\bimplements\\b",
+          "name": "storage.modifier.implements.flywheel"
+        },
+        {
+          "comment": "Access modifiers, `static` and `readonly` are soft keywords before a declaration on the same line.",
+          "match": "\\b(?:public|private|protected|static|readonly)\\b(?=[ \\t]+[A-Za-z_])",
           "name": "storage.modifier.flywheel"
         },
         {
@@ -611,7 +657,12 @@
           "name": "keyword.operator.comparison.flywheel"
         },
         {
-          "match": "[+*/%\\-]=|=",
+          "comment": "`=>` starts the value of a lambda (`function(int x) => x * 2`) or of a case in a match expression (`case 1 => \"one\"`).",
+          "match": "=>",
+          "name": "keyword.operator.arrow.flywheel"
+        },
+        {
+          "match": "//=|[+*/%\\-]=|=",
           "name": "keyword.operator.assignment.flywheel"
         },
         {
@@ -711,7 +762,7 @@
     "component-element": {
       "name": "meta.element.flywheel",
       "begin": "(?=<(?!(?:area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)(?![A-Za-z0-9_.:-]))((?:[A-Z][A-Za-z0-9_:-]*|[A-Za-z_][A-Za-z0-9_:-]*\\.[A-Za-z_])[A-Za-z0-9_.:-]*)(?:\\s*/?>|\\s+[A-Za-z_][A-Za-z0-9_.:-]*(?:\\s+[A-Za-z_][A-Za-z0-9_.:-]*)*(?:\\s*=(?!=)|\\s*/>|>)))",
-      "end": "(/>)|(</)(\\1)(\\s*)(>)|(?=</(?!\\1(?![A-Za-z0-9_.:-])))|(?<=>)(?=[}),\\]])|(?=^\\s*(?:var|const|print|return|if|else|for|while|match|case|function|class|component|void|end|import|public|private|try|catch|finally|throw)\\b(?![=(.]))",
+      "end": "(/>)|(</)(\\1)(\\s*)(>)|(?=</(?!\\1(?![A-Za-z0-9_.:-])))|(?<=>)(?=[}),\\]])|(?=^\\s*(?:var|const|print|return|if|unless|else|for|while|match|case|defer|function|class|component|void|end|import|public|private|try|catch|finally|throw)\\b(?![=(.]))",
       "endCaptures": {
         "1": {
           "name": "punctuation.definition.tag.end.flywheel"
@@ -1027,7 +1078,7 @@
           "name": "punctuation.definition.tag.end.flywheel"
         }
       },
-      "end": "(?=</)|(?<=>)(?=[}),\\]])|(?=^\\s*(?:var|const|print|return|if|else|for|while|match|case|function|class|component|void|end|import|public|private|try|catch|finally|throw)\\b(?![=(.]))",
+      "end": "(?=</)|(?<=>)(?=[}),\\]])|(?=^\\s*(?:var|const|print|return|if|unless|else|for|while|match|case|defer|function|class|component|void|end|import|public|private|try|catch|finally|throw)\\b(?![=(.]))",
       "patterns": [
         {
           "include": "#markup-content"

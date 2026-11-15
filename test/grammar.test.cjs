@@ -664,3 +664,64 @@ test('quantity types take any numeric type and a module-qualified namespace', ()
   has(result, 2, 'length', 'entity.name.namespace.unit.flywheel');
   has(result, 2, 'km', 'keyword.other.unit.flywheel');
 });
+
+test('unless, match statements and expressions, defer and defer when', () => {
+  const result = tokenize([
+    'unless ready do',
+    'else unless done run f()',
+    'string s = match x',
+    '    case 1, 2 => "low"',
+    '    case int n if n > 9 => "{n}"',
+    '    else => "other"',
+    'end',
+    'print match x case 1 => 2 else => 3 end',
+    'defer when score > 10 do',
+    'defer f.close()',
+    'var double = function(int x) => x * 2',
+    'xs //= 2',
+  ].join('\n'));
+  has(result, 0, 'unless', 'keyword.control.flywheel');
+  has(result, 1, 'unless', 'keyword.control.flywheel');
+  has(result, 1, 'run', 'keyword.control.flywheel');
+  has(result, 2, 'match', 'keyword.control.flywheel');
+  has(result, 3, 'case', 'keyword.control.flywheel');
+  has(result, 3, '=>', 'keyword.operator.arrow.flywheel');
+  has(result, 4, 'if', 'keyword.control.flywheel');
+  has(result, 5, 'else', 'keyword.control.flywheel');
+  has(result, 5, '=>', 'keyword.operator.arrow.flywheel');
+  has(result, 7, 'match', 'keyword.control.flywheel');
+  has(result, 7, 'case', 'keyword.control.flywheel');
+  has(result, 7, '=>', 'keyword.operator.arrow.flywheel', 1);
+  has(result, 7, 'end', 'keyword.control.flywheel');
+  has(result, 8, 'defer', 'keyword.control.flywheel');
+  has(result, 8, 'when', 'keyword.control.flywheel');
+  has(result, 9, 'defer', 'keyword.control.flywheel');
+  has(result, 10, '=>', 'keyword.operator.arrow.flywheel');
+  has(result, 11, '//=', 'keyword.operator.assignment.flywheel');
+});
+
+test('enum, interface, struct, element family declarations, implements, readonly, is and as', () => {
+  const result = tokenize([
+    'enum Color',
+    'interface Named extends Shape',
+    'struct Point',
+    'elements kv',
+    'class Dog extends Animal implements Named',
+    '    readonly int legs = 4',
+    'if b is Dog do',
+    'var d = b as Dog?',
+    'var struct = 1',
+  ].join('\n'));
+  has(result, 0, 'enum', 'storage.type.flywheel');
+  has(result, 0, 'Color', 'entity.name.type.flywheel');
+  has(result, 1, 'interface', 'storage.type.flywheel');
+  has(result, 1, 'Named', 'entity.name.type.flywheel');
+  has(result, 2, 'struct', 'storage.type.struct.flywheel');
+  has(result, 2, 'Point', 'entity.name.type.struct.flywheel');
+  has(result, 3, 'elements', 'storage.type.elements.flywheel');
+  has(result, 4, 'implements', 'storage.modifier.implements.flywheel');
+  has(result, 5, 'readonly', 'storage.modifier.flywheel');
+  has(result, 6, 'is', 'keyword.operator.type.flywheel');
+  has(result, 7, 'as', 'keyword.operator.type.flywheel');
+  lacks(result, 8, 'struct', 'storage');
+});

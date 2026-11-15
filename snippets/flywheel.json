@@ -40,6 +40,37 @@
     ],
     "description": "Conditional with alternative"
   },
+  "Unless": {
+    "prefix": "unless",
+    "body": [
+      "unless ${1:condition} do",
+      "    $0",
+      "end"
+    ],
+    "description": "Conditional block that runs when the condition is false (if not)"
+  },
+  "Match": {
+    "prefix": "match",
+    "body": [
+      "match ${1:value}",
+      "    case ${2:pattern} do",
+      "        $3",
+      "    else do",
+      "        $0",
+      "end"
+    ],
+    "description": "Match a value against cases"
+  },
+  "Match expression": {
+    "prefix": "matchexpr",
+    "body": [
+      "${1:var} ${2:result} = match ${3:value}",
+      "    case ${4:pattern} => ${5:value}",
+      "    else => ${0:value}",
+      "end"
+    ],
+    "description": "A match that produces the value of the chosen case"
+  },
   "For": {
     "prefix": "for",
     "body": [
@@ -66,6 +97,15 @@
       "end"
     ],
     "description": "Run the body each time a reactive condition becomes true"
+  },
+  "Defer when": {
+    "prefix": "deferwhen",
+    "body": [
+      "defer when ${1:condition} do",
+      "    $0",
+      "end"
+    ],
+    "description": "Run the body when a reactive condition becomes true, checked between statements"
   },
   "Reactive": {
     "prefix": "reactive",

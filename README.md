@@ -38,11 +38,12 @@ Node.js 22 or later is needed only to run the development and packaging tools. T
 
 ## Highlighting
 
-- Declarations, visibility modifiers, imports (including string, path, and URL imports, `import++`, and `import c`/`cxx`/`rust`/`zig` native imports), control flow (`try`/`catch`/`finally`, `throw ... with`, `assert`), built-in functions (including `input`, `type`, `unit`, and `unitns`), types, typed errors, and declared error types (`error HttpFailure(int status)`).
+- Declarations (functions, classes, components, `enum`, `interface`, `struct`, `elements` families), visibility modifiers and `readonly`, `extends`/`implements`, imports (including string, path, and URL imports, `import++`, and `import c`/`cxx`/`rust`/`zig` native imports), control flow (`unless`, `match`/`case`, `try`/`catch`/`finally`, `defer`, `throw ... with`, `assert`), `is` and `as`, built-in functions (including `input`, `type`, `unit`, and `unitns`), types, typed errors, and declared error types (`error HttpFailure(int status)`).
 - Strings with escapes, doubled literal braces, and nested expression interpolation.
 - Numbers, inclusive/exclusive ranges, arithmetic, comparisons, and logical operators. `#` is a comment; `//` is integer division.
-- Reactive declarations (`reactive`, `computed`), `when condition do ... end`, and negated bool aliases (`bool enabled/disabled = true`). These are soft keywords, so `when` and `reactive` used as names stay identifiers.
-- One-call `run` bodies: `if x run f()`, `else if y run g()`, `else run h()`, `for i in xs run f(i)`, `while ok run step()`, `when done run report()`. `run` is a soft keyword; `run()`, `os.run`, and `var run` stay identifiers.
+- Match expressions: `case pattern => value` and `else => value`, on their own lines or on one (`print match x case 1 => "one" else => "other" end`); `=>` is an operator, as in lambdas.
+- Reactive declarations (`reactive`, `computed`), `when condition do ... end` (also `defer when`, checked between statements), and negated bool aliases (`bool enabled/disabled = true`). These are soft keywords, so `when` and `reactive` used as names stay identifiers.
+- One-call `run` bodies: `if x run f()`, `unless x run f()`, `else if y run g()`, `else run h()`, `for i in xs run f(i)`, `while ok run step()`, `when done run report()`. `run` is a soft keyword; `run()`, `os.run`, and `var run` stay identifiers.
 - Units: `unitns name`, `unit`, and `unitconv` declarations, quantity types of any numeric type (`int[time]`, `u8[weight]`, `float[metric.length]`), and quantity literals with bare or qualified units (`100m`, `0.32km`, `15time.s`, `5eV`; `1e5` stays a number).
 - Nested markup, fragments, self-closing tags, HTML void elements (`<img>`, `<br>`, `<input>`, ... without `/>` or a closing tag), component/module tag names, void components (`void component Icon = ...`, used as `<Icon name="star">` without a closing tag), attributes (double-, single-quoted, unquoted, `{expression}`, and valueless), entities, and embedded expressions. HTML comments (`<!-- -->`) are highlighted; `#` is never a comment inside markup, including its `{expression}`s. Attribute names such as `class` are not keywords.
 - CSS inside `<style>` (selectors, rule blocks, properties, values, units, colors, functions, at-rules, comments) and JavaScript inside `<script>` (keywords, strings, template literals, numbers, comments, calls, properties, operators). Both stay markup text: as in the compiler, a `{` followed by whitespace, a `}` beside whitespace, and `{{`/`}}` are literal braces, while `{expression}` still interpolates. `#` is not a comment there. Comment toggling in these regions uses CSS/JavaScript comments.
@@ -51,7 +52,7 @@ Node.js 22 or later is needed only to run the development and packaging tools. T
 
 The language configuration supplies comment toggling, bracket/quote pairing, block indentation, and `# region` / `# endregion` folding markers. Angle brackets are intentionally not paired automatically because they also represent comparisons and generic arguments.
 
-Snippets include `fn`, `fn0`, `if`, `ifelse`, `for`, `while`, `try`, `trythen`, `throw`, `throwwith`, `error`, `assert`, `when`, `reactive`, `computed`, `boolalias`, `unitns`, `json`, `importnative`, `class`, `component`, `void component`, and `fragment`. `fn0` uses Flywheel's parentheses-free zero-argument declaration syntax.
+Snippets include `fn`, `fn0`, `if`, `ifelse`, `unless`, `match`, `matchexpr`, `for`, `while`, `try`, `trythen`, `throw`, `throwwith`, `error`, `assert`, `when`, `deferwhen`, `reactive`, `computed`, `boolalias`, `unitns`, `json`, `importnative`, `class`, `component`, `void component`, and `fragment`. `fn0` uses Flywheel's parentheses-free zero-argument declaration syntax.
 
 ## Development
 
