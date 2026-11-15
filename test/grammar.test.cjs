@@ -747,3 +747,22 @@ test('decorators before class and function declarations', () => {
   lacks(result, 4, 'f', 'entity.name.function.decorator');
   lacks(result, 5, 'register', 'entity.name.function.decorator');
 });
+
+test('constrained type parameters are not markup', () => {
+  const result = tokenize([
+    'function largest<T is comparable>(T[] items) returns T',
+    'class Box<T extends Shape>',
+    'print largest<int>([1, 2])',
+    'print <p>hi</p>',
+  ].join('\n'));
+  has(result, 0, '<', 'punctuation.definition.typeparameters.begin.flywheel');
+  has(result, 0, 'is', 'keyword.operator.type.flywheel');
+  has(result, 0, 'comparable', 'entity.name.type.flywheel');
+  has(result, 0, '(', 'punctuation.section.group.begin.flywheel');
+  has(result, 0, 'returns', 'storage.type.flywheel');
+  lacks(result, 0, 'items', 'meta.element');
+  has(result, 1, 'extends', 'storage.modifier.extends.flywheel');
+  has(result, 1, 'Shape', 'entity.name.type.flywheel');
+  has(result, 2, 'int', 'support.type.flywheel', 1);
+  has(result, 3, '<p', 'punctuation.definition.tag.begin.flywheel');
+});
