@@ -766,3 +766,8 @@ test('constrained type parameters are not markup', () => {
   has(result, 2, 'int', 'support.type.flywheel', 1);
   has(result, 3, '<p', 'punctuation.definition.tag.begin.flywheel');
 });
+
+test('otherwise is the null fallback operator', () => {
+  const result = tokenize('print port otherwise 8080');
+  has(result, 0, 'otherwise', 'keyword.operator.logical.flywheel');
+});
