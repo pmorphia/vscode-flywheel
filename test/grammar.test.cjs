@@ -725,3 +725,25 @@ test('enum, interface, struct, element family declarations, implements, readonly
   has(result, 7, 'as', 'keyword.operator.type.flywheel');
   lacks(result, 8, 'struct', 'storage');
 });
+
+test('decorators before class and function declarations', () => {
+  const result = tokenize([
+    'register class Store',
+    'logged("db") memoize function fib(int n) returns int',
+    'public register class Cache extends Store',
+    'app.route("/") function home',
+    'var f = function(int x) => x',
+    'register(Store)',
+  ].join('\n'));
+  has(result, 0, 'register', 'entity.name.function.decorator.flywheel');
+  has(result, 0, 'class', 'storage.type.class.flywheel');
+  has(result, 0, 'Store', 'entity.name.type.class.flywheel');
+  has(result, 1, 'logged', 'entity.name.function.decorator.flywheel');
+  has(result, 1, 'memoize', 'entity.name.function.decorator.flywheel');
+  has(result, 1, 'fib', 'entity.name.function.flywheel');
+  has(result, 2, 'public', 'storage.modifier.flywheel');
+  has(result, 2, 'register', 'entity.name.function.decorator.flywheel');
+  has(result, 3, 'app.route', 'entity.name.function.decorator.flywheel');
+  lacks(result, 4, 'f', 'entity.name.function.decorator');
+  lacks(result, 5, 'register', 'entity.name.function.decorator');
+});

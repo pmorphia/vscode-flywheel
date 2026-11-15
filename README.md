@@ -38,7 +38,7 @@ Node.js 22 or later is needed only to run the development and packaging tools. T
 
 ## Highlighting
 
-- Declarations (functions, classes, components, `enum`, `interface`, `struct`, `elements` families), visibility modifiers and `readonly`, `extends`/`implements`, imports (including string, path, and URL imports, `import++`, and `import c`/`cxx`/`rust`/`zig` native imports), control flow (`unless`, `match`/`case`, `try`/`catch`/`finally`, `defer`, `throw ... with`, `assert`), `is` and `as`, built-in functions (including `input`, `type`, `unit`, and `unitns`), types, typed errors, and declared error types (`error HttpFailure(int status)`).
+- Declarations (functions, classes, components, `enum`, `interface`, `struct`, `elements` families), visibility modifiers and `readonly`, `extends`/`implements`, decorators (`register class Store`, `logged("db") memoize function fib`), imports (including string, path, and URL imports, `import++`, and `import c`/`cxx`/`rust`/`zig` native imports), control flow (`unless`, `match`/`case`, `try`/`catch`/`finally`, `defer`, `throw ... with`, `assert`), `is` and `as`, built-in functions (including `input`, `type`, `unit`, and `unitns`), types, typed errors, and declared error types (`error HttpFailure(int status)`).
 - Strings with escapes, doubled literal braces, and nested expression interpolation.
 - Numbers, inclusive/exclusive ranges, arithmetic, comparisons, and logical operators. `#` is a comment; `//` is integer division.
 - Match expressions: `case pattern => value` and `else => value`, on their own lines or on one (`print match x case 1 => "one" else => "other" end`); `=>` is an operator, as in lambdas.
